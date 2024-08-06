@@ -5,7 +5,7 @@ const { User, Book } = require("../models");
 const resolvers = {
   Query: {
     user: async (parent, { _id }) => {
-      return User.find({ _id });
+      return User.findById(_id);
     },
   },
   Mutation: {
@@ -14,18 +14,19 @@ const resolvers = {
       return user;
     },
     addBook: async (parent, { _id, book }) => {
-      const user = await User.find({ _id });
+      const user = await User.findById(_id);
       user.savedBooks.push(book);
+      await user.save();
       return user;
     },
-    // deleteBook: async (parent, { _id, techNum }) => {
-    //   const vote = await Matchup.findOneAndUpdate(
-    //     { _id },
-    //     { $inc: { [`tech${techNum}_votes`]: 1 } },
-    //     { new: true }
-    //   );
-    //   return vote;
-    // },
+    deleteBook: async (parent, { _id, bookId }) => {
+      const user = await User.findOneAndUpdate(
+        { _id: user._id },
+        { $pull: { savedBooks: { bookId } } },
+        { new: true }
+      );
+      return user;
+    },
   },
 };
 
