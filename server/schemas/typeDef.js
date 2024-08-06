@@ -11,18 +11,20 @@ const typeDefs = `
 
     type User {
         _id: ID
-        username: String
-        email: String
-        password: String
-        savedBooks:
+        username: String!
+        email: String!
+        password: String!
+        savedBooks: [Book]!
     }
 
     type Query {
-
+        user(_id: String): [User]
     }
 
     type Mutation {
-        
+        createUser(username: String!, email: String!, password: String!, savedBooks: [Book]!): [User]
+        addBook(_id: String!): [User]
+        deleteBook(_id: String!): [User]
     }
 `;
 
