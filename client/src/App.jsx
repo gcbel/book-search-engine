@@ -1,4 +1,5 @@
 /* DEPENDENCIES */
+import React from "react";
 import "./App.css";
 import { Outlet } from "react-router-dom";
 import {
@@ -26,6 +27,7 @@ const authLink = setContext((_, { headers }) => {
 });
 
 const client = new ApolloClient({
+  uri: "/graphql",
   link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
