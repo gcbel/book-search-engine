@@ -24,7 +24,7 @@ const typeDefs = `
     }
 
     type UserLogin {
-        token: String
+        token: String!
         user: User
     }
 

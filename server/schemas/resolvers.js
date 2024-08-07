@@ -1,8 +1,8 @@
 /* DEPENDENCIES */
-const { User, Book } = require("../models");
+const { User } = require("../models");
 const { signToken } = require("../utils/auth");
 
-/* RESOLVER */
+/* RESOLVERS */
 const resolvers = {
   Query: {
     user: async (parent, { _id }) => {

@@ -1,15 +1,30 @@
-import './App.css';
-import { Outlet } from 'react-router-dom';
+/* DEPENDENCIES */
+import "./App.css";
+import { Outlet } from "react-router-dom";
+import {
+  ApolloClient,
+  ApolloProvider,
+  InMemoryCache,
+  HttpLink,
+} from "@apollo/client";
+import Navbar from "./components/Navbar";
 
-import Navbar from './components/Navbar';
+const client = new ApolloClient({
+  link: new HttpLink({
+    uri: "http://localhost:3001/graphql",
+  }),
+  cache: new InMemoryCache(),
+});
 
+/* APP */
 function App() {
   return (
-    <>
+    <ApolloProvider client={client}>
       <Navbar />
       <Outlet />
-    </>
+    </ApolloProvider>
   );
 }
 
+/* EXPORT */
 export default App;
