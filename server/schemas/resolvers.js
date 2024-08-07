@@ -1,5 +1,6 @@
 /* DEPENDENCIES */
 const { User, Book } = require("../models");
+const { signToken } = require("../utils/auth");
 
 /* RESOLVER */
 const resolvers = {
@@ -26,6 +27,24 @@ const resolvers = {
         { new: true }
       );
       return user;
+    },
+    login: async (parent, { username, email, password }) => {
+      const user = await User.findOne({
+        $or: [{ username }, { email }],
+      });
+
+      if (!user) {
+        throw new Error("Can't find this user");
+      }
+
+      const correctPw = await user.isCorrectPassword(password);
+
+      if (!correctPw) {
+        throw new Error("Wrong password!");
+      }
+
+      const token = signToken(user);
+      return { token, user };
     },
   },
 };
