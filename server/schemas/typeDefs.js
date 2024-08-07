@@ -16,7 +16,6 @@ const typeDefs = `
         description: String!
         image: String
         link: String
-        title: String!
     }
 
     type User {
@@ -36,10 +35,10 @@ const typeDefs = `
     }
 
     type Mutation {
-        createUser(username: String!, email: String!, password: String!, savedBooks: [BookInput]!): [UserLogin]
-        addBook(_id: String!, book: [BookInput]): [User]
-        deleteBook(_id: String!): [User]
-        login(email: String, password: String!): [UserLogin]
+        createUser(username: String!, email: String!, password: String!, savedBooks: [BookInput]!): UserLogin
+        addBook(_id: String!, book: [BookInput]): User
+        deleteBook(_id: String!): User
+        login(email: String, password: String!): UserLogin
     }
 `;
 
