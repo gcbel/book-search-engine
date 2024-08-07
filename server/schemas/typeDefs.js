@@ -31,8 +31,8 @@ const typeDefs = `
     }
 
     type Query {
-        user: [User]
-    }
+        user(_id: ID!): User
+      }
 
     type Mutation {
         createUser(username: String!, email: String!, password: String!, savedBooks: [BookInput]!): UserLogin
