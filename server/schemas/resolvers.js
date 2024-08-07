@@ -6,27 +6,34 @@ const { signToken } = require("../utils/auth");
 const resolvers = {
   Query: {
     user: async (parent, { _id }) => {
-      return User.findById(_id);
+      return User.findById(_id).populate("savedBooks");
     },
   },
   Mutation: {
     createUser: async (parent, args) => {
       const user = await User.create(args);
-      return user;
+      const token = signToken(user);
+      return { token, user };
     },
-    addBook: async (parent, { _id, book }) => {
-      const user = await User.findById(_id);
-      user.savedBooks.push(book);
-      await user.save();
-      return user;
+    addBook: async (parent, { book }, context) => {
+      if (context.user) {
+        const user = await User.findByIdAndUpdate(
+          { _id: context.user._id },
+          { $addToSet: { savedBooks: input } },
+          { new: true }
+        );
+        return user;
+      }
     },
-    deleteBook: async (parent, { _id, bookId }) => {
-      const user = await User.findOneAndUpdate(
-        { _id: user._id },
-        { $pull: { savedBooks: { bookId } } },
-        { new: true }
-      );
-      return user;
+    deleteBook: async (parent, { bookId }, context) => {
+      if (context.user) {
+        const user = await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { $pull: { savedBooks: { bookId } } },
+          { new: true }
+        );
+        return user;
+      }
     },
     login: async (parent, { username, email, password }) => {
       const user = await User.findOne({
