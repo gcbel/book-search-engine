@@ -1,14 +1,14 @@
 /* DEPENDENCIES */
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { Navbar, Nav, Container, Modal, Tab } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import SignUpForm from "./SignupForm";
 import LoginForm from "./LoginForm";
 import Auth from "../utils/auth";
 
 /* NAV BAR */
 const AppNavbar = () => {
-  // set modal display state
+  // hook for setting modal display state
   const [showModal, setShowModal] = useState(false);
 
   return (

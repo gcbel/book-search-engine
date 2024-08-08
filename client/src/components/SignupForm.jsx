@@ -7,24 +7,25 @@ import Auth from "../utils/auth";
 
 /* SIGNUP FORM */
 const SignupForm = () => {
-  // set initial form state
+  // hooks for setting up initial form state, form validation, and form alert, respectively
   const [userFormData, setUserFormData] = useState({
     username: "",
     email: "",
     password: "",
   });
-  // set state for form validation
   const [validated] = useState(false);
-  // set state for alert
   const [showAlert, setShowAlert] = useState(false);
 
+  // hook for mutation for creating new user (signing up)
   const [createUser, { error }] = useMutation(CREATE_USER);
 
+  // handles updating of userFormData on user input
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setUserFormData({ ...userFormData, [name]: value });
   };
 
+  // handles submitting of a form
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
@@ -41,7 +42,6 @@ const SignupForm = () => {
       });
 
       const { token, user } = data.createUser;
-      console.log(user);
       Auth.login(token);
     } catch (err) {
       console.error(err);
