@@ -5,9 +5,9 @@ const { signToken } = require("../utils/auth");
 /* RESOLVERS */
 const resolvers = {
   Query: {
-    user: async (parent, { _id }, context) => {
+    me: async (parent, args, context) => {
       if (context.user) {
-        return User.findById(_id).populate("savedBooks");
+        return User.findOne({ _id: context.user._id });
       }
     },
   },
@@ -47,12 +47,16 @@ const resolvers = {
     },
     deleteBook: async (parent, { bookId }, context) => {
       if (context.user) {
-        const user = await User.findOneAndUpdate(
-          { _id: context.user._id },
-          { $pull: { savedBooks: { bookId } } },
-          { new: true }
-        );
-        return user;
+        try {
+          const user = await User.findOneAndUpdate(
+            { _id: context.user._id },
+            { $pull: { savedBooks: { bookId } } },
+            { new: true }
+          );
+          return user;
+        } catch (err) {
+          throw new Error("Error deleting book");
+        }
       }
     },
   },
