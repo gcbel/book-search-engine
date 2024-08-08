@@ -6,18 +6,19 @@ const { signToken } = require("../utils/auth");
 const resolvers = {
   Query: {
     me: async (parent, args, context) => {
+      console.log(context);
       if (context.user) {
         return User.findOne({ _id: context.user._id });
       }
     },
   },
   Mutation: {
-    createUser: async (parent, { username, email, password }) => {
+    addUser: async (parent, { username, email, password }) => {
       const user = await User.create({ username, email, password });
       const token = signToken(user);
       return { token, user };
     },
-    login: async (parent, { email, password }) => {
+    loginUser: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
       if (!user) {
         throw new Error("Error finding user");
@@ -29,6 +30,7 @@ const resolvers = {
       }
 
       const token = signToken(user);
+      console.log(token);
       return { token, user };
     },
     saveBook: async (parent, { bookInput }, context) => {
@@ -45,7 +47,7 @@ const resolvers = {
         }
       }
     },
-    deleteBook: async (parent, { bookId }, context) => {
+    removeBook: async (parent, { bookId }, context) => {
       if (context.user) {
         try {
           const user = await User.findOneAndUpdate(

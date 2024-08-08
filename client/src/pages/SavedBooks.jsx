@@ -2,18 +2,18 @@
 import { Container, Card, Button, Row, Col } from "react-bootstrap";
 import { useQuery, useMutation } from "@apollo/client";
 import { removeBookId } from "../utils/localStorage";
-import { DELETE_BOOK } from "../utils/mutations";
+import { REMOVE_BOOK } from "../utils/mutations";
 import { GET_ME } from "../utils/queries";
 import Auth from "../utils/auth";
 
 /* SAVED BOOKS */
 const SavedBooks = () => {
   // hook for mutation for deleting book
-  const [deleteBook, { error }] = useMutation(DELETE_BOOK);
+  const [removeBook, { error }] = useMutation(REMOVE_BOOK);
 
   // hook for querying user data
   const { loading, data } = useQuery(GET_ME);
-  const userData = data?.me || {};
+  let userData = data?.me || {};
 
   // deletes book, accepts book's id value and calls removeBook mutation
   const handleDeleteBook = async (bookId) => {
@@ -23,7 +23,7 @@ const SavedBooks = () => {
     }
 
     try {
-      const { data } = await deleteBook({
+      const { data } = await removeBook({
         variables: { bookId },
       });
 
@@ -37,6 +37,8 @@ const SavedBooks = () => {
   // allow data to load from 'me' query
   if (loading) {
     return <h2>LOADING...</h2>;
+  } else {
+    userData = data?.me || {};
   }
 
   return (
