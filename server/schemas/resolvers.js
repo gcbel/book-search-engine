@@ -20,25 +20,29 @@ const resolvers = {
     login: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
       if (!user) {
-        throw new Error("Can't find this user");
+        throw new Error("Error finding user");
       }
 
       const correctPw = await user.isCorrectPassword(password);
       if (!correctPw) {
-        throw new Error("Wrong password!");
+        throw new Error("Incorrect password!");
       }
 
       const token = signToken(user);
       return { token, user };
     },
-    addBook: async (parent, { book }, context) => {
+    addBook: async (parent, { bookInput }, context) => {
       if (context.user) {
-        const user = await User.findByIdAndUpdate(
-          { _id: context.user._id },
-          { $addToSet: { savedBooks: input } },
-          { new: true }
-        );
-        return user;
+        try {
+          const user = await User.findByIdAndUpdate(
+            { _id: context.user._id },
+            { $addToSet: { savedBooks: input } },
+            { new: true }
+          );
+          return user;
+        } catch (err) {
+          throw new Error("Error saving book");
+        }
       }
     },
     deleteBook: async (parent, { bookId }, context) => {

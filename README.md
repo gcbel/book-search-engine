@@ -2,7 +2,7 @@
 
 ## Description
 
-Visit this project at https://book-search-engine-2x8p.onrender.com.
+Visit this project [here](https://book-search-engine-2x8p.onrender.com).
 
 This project takes an existing book search engine configured with MongoDB and a RESTful API and refactors it using GraphQL and an Apollo server. Built with React, GraphQL, ...
 
